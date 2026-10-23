@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Update User | User Management</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="dashboard-header">
+        <div>
+            <h2>✏️ Edit User</h2>
+            <p class="subtitle">
+                Update the user's information below.
+            </p>
+        </div>
+
+        <button type="button" id="darkModeToggle">
+            🌙 Dark Mode
+        </button>
+    </div>
+
+    <div class="form-card">
+
+        <form id="updateForm">
+
+            <label for="name">Full Name</label>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter full name"
+                required
+            >
+
+            <label for="email">Email Address</label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter email address"
+                required
+            >
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                    ✓ Save Changes
+                </button>
+
+                <a href="index.html" class="btn-secondary">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get('id'), 10);
+    const user = getUsers().find(u => u.id === id);
+
+    // Redirect if no id or user not found
+    if (!user) {
+        window.location.href = 'index.html';
+    } else {
+        document.getElementById('name').value = user.name;
+        document.getElementById('email').value = user.email;
+    }
+
+    document.getElementById('updateForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+
+        if (name !== '' && email !== '') {
+            const users = getUsers().map(u =>
+                u.id === id ? { ...u, name: name, email: email } : u
+            );
+            saveUsers(users);
+            window.location.href = 'index.html';
+        }
+    });
+</script>
+
+</body>
+</html>
